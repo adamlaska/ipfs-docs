@@ -4,7 +4,25 @@ const DEPLOY_DOMAIN = 'https://docs.ipfs.tech'
 const SPEEDCURVE_ID = process.env.SPEEDCURVE_ID || ''
 const pageSuffix = '/'
 
+const installMenuChildren = [
+  ['/install/ipfs-desktop', 'IPFS Desktop App'],
+  ['/install/ipfs-companion', 'IPFS Companion Browser Extension'],
+  ['/install/command-line','Kubo Daemon & CLI'],
+  ['/install/run-ipfs-inside-docker', 'Kubo in Docker'],
+  ['/install/server-infrastructure', 'IPFS Cluster'],
+  ['https://github.com/ipfs/rainbow#readme', 'Rainbow Gateway'],
+  ['https://github.com/ipfs/someguy#readme', 'Someguy Delegated Router'],
+  ['https://github.com/ipfs/helia#readme','Helia SDK for JS'],
+  ['https://github.com/ipfs/boxo#readme','Boxo SDK for Go'],
+  ['/concepts/ipfs-implementations','Other Implementations']
+]
+
 module.exports = {
+  configureWebpack: {
+    output: {
+      hashFunction: "sha256"
+    }
+  },
   base: '/',
   head: require('./head'),
   locales: {
@@ -17,22 +35,15 @@ module.exports = {
   markdown: {
     pageSuffix,
     extendMarkdown: md => {
-      md.set({
-        breaks: true
-      })
       md.use(require('markdown-it-video'))
       md.use(require('markdown-it-footnote'))
       md.use(require('markdown-it-task-lists'))
       md.use(require('markdown-it-deflist')),
-        md.use(require('markdown-it-imsize')),
-        md.use(require('markdown-it-image-lazy-loading'))
+      md.use(require('markdown-it-imsize')),
+      md.use(require('markdown-it-image-lazy-loading'))
     }
   },
   themeConfig: {
-    algolia: {
-      apiKey: 'e56fc7c611806522df45191e22ed15ac',
-      indexName: 'ipfs-docs'
-    },
     defaultImage: '/images/social-card.png',
     author: {
       name: 'IPFS Team',
@@ -68,280 +79,344 @@ module.exports = {
           }
         },
         nav: require('./nav/en'),
-        sidebar: [
-          {
-            title: 'Install',
-            path: '/install/',
-            children: [
-              'install/ipfs-desktop',
-              'install/ipfs-companion',
-              'install/command-line',
-              ['install/ipfs-updater', 'Updater'],
-              'install/server-infrastructure',
-              'install/recent-releases'
-            ]
-          },
-          {
-            title: 'Basics',
-            path: '/basics/',
-            children: [
-                'basics/desktop-app',
-                'basics/command-line',
-                'basics/ipfs-implementations'
-            ]
-          },
-          {
-            title: 'Concepts',
-            path: '/concepts/',
-            children: [
-              {
-                title: 'IPFS 101',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                    '/concepts/what-is-ipfs',
-                    '/concepts/how-ipfs-works',
-                    '/concepts/privacy-and-encryption',
-                    '/concepts/nodes',
-                    '/concepts/glossary',
-                    '/concepts/usage-ideas-examples',
-                    '/concepts/faq'
-                ]
-              },
-              {
-                title: 'Content-addressed data',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/concepts/content-addressing',
-                  '/concepts/hashing',
-                  '/concepts/immutability',
-                  '/concepts/persistence'
-                ]
-              },
-              {
-                title: 'Peer-to-peer sharing',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/concepts/dht',
-                  '/concepts/merkle-dag',
-                  '/concepts/bitswap',
-                  ['https://ipld.io/docs/intro/primer/', 'IPLD' ],
-                  '/concepts/ipns',
-                  '/concepts/libp2p',
-                  '/concepts/file-systems',
-                ]
-              },
-              {
-                title: 'Integrating with the Web',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                    '/concepts/ipfs-gateway', 
-                    '/concepts/dnslink'
-                ]
-              },
-              {
-                title: 'Case studies',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  ['/concepts/case-study-arbol', 'Arbol'],
-                  ['/concepts/case-study-audius', 'Audius'],
-                  ['/concepts/case-study-fleek', 'Fleek'],
-                  ['/concepts/case-study-likecoin', 'LikeCoin'],
-                  ['/concepts/case-study-morpheus', 'Morpheus.Network'],
-                  ['/concepts/case-study-openbazaar', 'OpenBazaar']
-                ]
-              },
-              {
-                title: 'Further reading',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: ['/concepts/further-reading/academic-papers']
-              }
-            ]
-          },
-          {
-            title: 'How-tos',
-            path: '/how-to/',
-            children: [
-              {
-                title: 'Quick start',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: ['/how-to/command-line-quick-start']
-              },
-              {
-                title: 'Customize your install',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/how-to/configure-node',
-                  '/how-to/modify-bootstrap-list',
-                  '/how-to/nat-configuration',
-                  '/how-to/default-profile',
-                  '/how-to/run-ipfs-inside-docker',
-                  [
-                    'https://github.com/ipfs-examples/js-ipfs-examples/tree/master/examples/custom-ipfs-repo',
-                    'Customize an IPFS repo'
-                  ],
-                  '/how-to/best-practices-for-ipfs-builders',
-                  '/how-to/troubleshooting'
-                ]
-              },
-              {
-                title: 'Manage files',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/how-to/work-with-blocks',
-                  '/how-to/pin-files',
-                  '/how-to/work-with-pinning-services',
-                  '/how-to/take-snapshot',
-                  '/how-to/store-play-videos',
-                  '/how-to/host-git-style-repo',
-                  '/how-to/move-ipfs-installation/move-ipfs-installation'
-                ]
-              },
-              {
-                title: 'Work with peers',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/how-to/observe-peers',
-                  '/how-to/exchange-files-between-nodes',
-                  '/how-to/peering-with-content-providers'
-                ]
-              },
-              {
-                title: 'Websites on IPFS',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/how-to/websites-on-ipfs/single-page-website',
-                  '/how-to/websites-on-ipfs/multipage-website',
-                  '/how-to/websites-on-ipfs/link-a-domain',
-                  '/how-to/websites-on-ipfs/introducing-fleek',
-                  '/how-to/websites-on-ipfs/static-site-generators'
-                ]
-              },
-              {
-                title: 'IPFS in the browser',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  'how-to/address-ipfs-on-web',
-                  'how-to/create-simple-chat-app',
-                  '/how-to/browser-tools-frameworks'
-                ]
-              },
-              {
-                title: 'IPFS Companion',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  'how-to/companion-node-types',
-                  'how-to/dnslink-companion',
-                  'how-to/companion-window-ipfs',
-                  '/how-to/companion-x-ipfs-path-header'
-                ]
-              },
-              {
-                title: 'IPFS & Blockchain Networks',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  'how-to/mint-nfts-with-ipfs',
-                  'how-to/best-practices-for-nft-data'
-                ]
-              }
-            ]
-          },
-          {
-            title: 'API & CLI',
-            path: '/reference/',
-            children: [
-              '/reference/http/gateway',
-              '/reference/js/api',
-              '/reference/go/api',
-              '/reference/kubo/cli',
-              '/reference/kubo/rpc'
-            ]
-          },
-          {
-            title: 'Community',
-            path: '/community/',
-
-            children: [
-              {
-                title: 'Join the community',
-                sidebarDepth: 2,
-                collapsable: false,
-                children: [
-                  [
-                    'https://ipfs.us4.list-manage.com/subscribe?u=25473244c7d18b897f5a1ff6b&id=cad54b2230',
-                    'IPFS newsletter'
-                  ],
-                  '/community/contribute/ways-to-contribute',
-                  ['https://discuss.ipfs.io/', 'IPFS forums'],
-                  '/community/chat',
-                  ['https://proto.school/events', 'ProtoSchool workshops'],
-                  ['https://www.meetup.com/members/249142444/', 'Meetups'],
-                  '/community/social-media',
-                  ['https://awesome.ipfs.io', 'Awesome IPFS'],
-                  [
-                    'https://www.youtube.com/channel/UCdjsUXJ3QawK4O5L1kqqsew',
-                    'YouTube'
-                  ]
-                ]
-              },
-              {
-                title: 'Write the docs',
-                sidebarDepth: 1,
-                collapsable: false,
-                children: [
-                  '/community/contribute/grammar-formatting-and-style',
-                  '/community/contribute/writing-guide',
-                  '/community/contribute/code-persona',
-                  '/community/contribute/contribution-tutorial'
-                ]
-              }
-            ]
-          },
-          {
-            title: 'Project',
-            path: '/project/',
-            children: [
-              'project/history',
-              'project/repository-guide',
-              ['https://github.com/ipfs/roadmap', 'Roadmap'],
-              'project/implementation-status',
-              ['https://github.com/ipfs/specs', 'Specifications'],
-              ['https://github.com/ipfs/research', 'Research'],
-              ['https://github.com/ipfs/team-mgmt', 'Team org planning'],
-              '/project/related-projects',
-              '/project/contribute',
-              [
-                'https://github.com/ipfs/community/blob/master/code-of-conduct.md',
-                'Code of conduct'
-              ]
+        nav: [
+          { text: 'Get Started', link: '/install/' },
+          { text: 'Concepts', link: '/concepts/' },
+          { text: 'Guides', link: '/how-to/' },
+          { text: 'Reference', link: '/reference/' },
+          { text: 'Project', link: '/project/' },
+          { text: 'Case Studies',
+            items: [
+              {text: 'Arbol', link : '/case-studies/arbol/'},
+              {text: 'Audius', link : '/case-studies/audius'},
+              {text: 'Fleek', link : '/case-studies/fleek'},
+              {text: 'LikeCoin', link : '/case-studies/likecoin'},
+              {text: 'Morpheus.Network', link : '/case-studies/morpheus'},
+              {text: 'Snapshot',link : '/case-studies/snapshot'},
             ]
           }
-        ]
+        ],
+
+        sidebar: {
+          '/install/':  [
+            ['/concepts/what-is-ipfs','Basic Concepts'],
+            {
+              title: 'Quickstart',
+              sidebarDepth: 1,
+              collapsable: false,
+              children: [
+                ['/quickstart/publish','Publish with IPFS (UI)'],
+                ['/quickstart/publish_cli', 'Publish with IPFS (command line)' ], 
+                ['/quickstart/retrieve','Retrieve with IPFS'],
+              ]
+            },
+            {
+              title: 'Install',
+              sidebarDepth: 1,
+              collapsable: false,
+              children: installMenuChildren
+            },
+          ],
+          '/quickstart/':  [
+            ['/concepts/what-is-ipfs','Basic Concepts'],
+            {
+              title: 'Quickstart',
+              sidebarDepth: 1,
+              collapsable: false,
+              children: [
+                ['/quickstart/publish','Publish with IPFS (UI)'],
+                ['/quickstart/publish_cli', 'Publish with IPFS (command line)' ],
+                ['/quickstart/retrieve','Retrieve with IPFS'],
+                
+              ]
+            },
+            {
+              title: 'Install',
+              sidebarDepth: 1,
+              collapsable: false,
+              children: installMenuChildren
+            },
+          ],
+          '/concepts/': [
+            {
+              title: 'Basics',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                  '/concepts/what-is-ipfs',
+                  '/concepts/ipfs-solves',
+                  '/concepts/how-ipfs-works',
+              ]
+            },
+            {
+              title: 'Ideas and theory',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                  '/concepts/lifecycle',
+                  '/concepts/hashing',
+                  '/concepts/immutability',
+                  '/concepts/persistence',
+                  '/concepts/privacy-and-encryption',
+                  '/concepts/nodes',
+              ]
+            },
+            {
+              title: 'Subsystems and components',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/concepts/content-addressing',
+                '/concepts/bitswap',
+                '/concepts/dht',
+                '/concepts/dnslink',
+                '/concepts/file-systems',
+                '/concepts/ipfs-gateway',
+                ['https://ipld.io/docs/intro/primer/', 'IPLD (InterPlanetaryLinkedData)' ],
+                '/concepts/ipni',
+                '/concepts/ipns',
+                '/concepts/libp2p',
+                '/concepts/merkle-dag'
+              ]
+            },
+            {
+              title: 'Implementations',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                ['/concepts/implementations', 'Implementations explained'],
+                ['/concepts/ipfs-implementations', 'List of implementations']
+              ]
+            },
+            '/concepts/cod',
+            '/concepts/comparisons',
+            '/concepts/public-utilities',
+            ['/concepts/measuring', 'Measuring the network'],
+            '/concepts/faq',
+            '/concepts/glossary',
+            '/concepts/further-reading/academic-papers'
+          ],
+          '/how-to/': [
+            '/how-to/desktop-app',
+            {
+              title: 'IPFS Kubo Tutorials',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/kubo-basic-cli',
+                '/how-to/command-line-quick-start',
+                '/how-to/configure-node',
+                '/how-to/modify-bootstrap-list',
+                '/how-to/nat-configuration',
+                '/how-to/ipfs-updater', 
+                [
+                  'https://github.com/ipfs-examples/js-ipfs-examples/tree/master/examples/custom-ipfs-repo',
+                  'Customize an IPFS repo'
+                ],
+                '/how-to/kubo-garbage-collection',
+                '/how-to/troubleshooting',   
+                '/how-to/webtransport',   
+              ]
+            },
+            {
+              title: 'Manage files',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/work-with-blocks',
+                '/how-to/pin-files',
+                '/how-to/work-with-pinning-services',
+                '/how-to/take-snapshot',
+                '/how-to/store-play-videos',
+                '/how-to/host-git-repo',
+                '/how-to/move-ipfs-installation/move-ipfs-installation',
+              ]
+            },
+            {
+              title: 'Work with peers',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/observe-peers',
+                '/how-to/peering-with-content-providers'
+              ]
+            },
+            {
+              title: 'Websites on IPFS',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/websites-on-ipfs/single-page-website',
+                '/how-to/websites-on-ipfs/multipage-website',
+                '/how-to/websites-on-ipfs/link-a-domain',
+                '/how-to/websites-on-ipfs/introducing-fleek',
+                '/how-to/websites-on-ipfs/static-site-generators',
+                '/how-to/websites-on-ipfs/redirects-and-custom-404s'
+              ]
+            },
+            {
+              title: 'IPFS in the browser',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/address-ipfs-on-web',
+                '/how-to/browser-tools-frameworks'
+              ]
+            },
+            {
+              title: 'IPNS',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/publish-ipns'
+              ]
+            },
+            {
+              title: 'IPFS Gateway',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/gateway-best-practices',
+                '/how-to/gateway-troubleshooting'
+              ]
+            },
+            {
+              title: 'IPFS Companion',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/companion-node-types',
+                '/how-to/dnslink-companion',
+                '/how-to/companion-window-ipfs',
+                '/how-to/companion-x-ipfs-path-header'
+              ]
+            },
+            {
+              title: 'IPFS & Blockchain Networks',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/how-to/best-practices-for-nft-data'         
+              ]
+            },
+            {
+              title: 'Privacy and Encryption',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                ['/how-to/privacy-best-practices', 'Privacy and Encryption'], 
+              ]
+            },
+          ],
+          '/reference/': [
+            '/reference/diagnostic-tools',
+            '/reference/http/gateway',
+            '/reference/js/api',
+            '/reference/go/api',
+            {
+              title: 'Kubo CLI',
+              sidebarDepth: 1,
+              collapsable: true,
+              path: '/reference/kubo/cli'
+            },
+            {
+              title: 'Kubo RPC API',
+              sidebarDepth: 1,
+              collapsable: true,
+              path: '/reference/kubo/rpc'
+            },
+            '/reference/kubo-rpc-cli.md'
+
+          ],
+          '/community/': [
+            ['/community/', 'Join the community'],
+            '/community/contribute/ways-to-contribute',
+            {
+              title: 'Write the docs',
+              sidebarDepth: 1,
+              collapsable: true,
+              children: [
+                '/community/contribute/grammar-formatting-and-style',
+                '/community/contribute/writing-guide',
+                '/community/contribute/code-persona',
+                '/community/contribute/contribution-tutorial'
+              ]
+            },
+            '/project/history',
+            '/project/repository-guide',
+            '/project/related-projects',
+            ['https://github.com/ipfs/specs', 'Specifications'],
+            ['/concepts/further-reading/academic-papers', 'Research'],
+            [
+              'https://github.com/ipfs/community/blob/master/code-of-conduct.md',
+              'Code of conduct'
+            ],
+          ],
+          '/project/' : [
+                ['/community/',  'Join the community'],
+                '/community/contribute/ways-to-contribute',
+                {
+                  title: 'Write the docs',
+                  sidebarDepth: 1,
+                  collapsable: true,
+                  children: [
+                    '/community/contribute/grammar-formatting-and-style',
+                    '/community/contribute/writing-guide',
+                    '/community/contribute/code-persona',
+                    '/community/contribute/contribution-tutorial'
+                  ]
+                },
+                '/project/history',
+                '/project/repository-guide',
+                '/project/related-projects',
+                ['https://github.com/ipfs/specs', 'Specifications'],
+                ['/concepts/further-reading/academic-papers', 'Research'],
+                [
+                  'https://github.com/ipfs/community/blob/master/code-of-conduct.md',
+                  'Code of conduct'
+                ],
+          ],
+          '/case-studies/' : [
+            {
+              title: 'Case Studies',
+              collapsable: false,
+              children: [
+                ['/case-studies/arbol', 'Arbol'],
+                ['/case-studies/audius', 'Audius'],
+                ['/case-studies/fleek', 'Fleek'],
+                ['/case-studies/likecoin', 'LikeCoin'],
+                ['/case-studies/morpheus', 'Morpheus.Network'],
+                ['/case-studies/snapshot', 'Snapshot']
+              ]
+            }
+          ],
+          '/': [
+            '/install/',
+            '/concepts/',
+            '/how-to/',
+            '/reference/',
+            '/project/',
+            {
+              title: 'Case Studies',
+              collapsable: true,
+              children: [
+                ['/case-studies/arbol', 'Arbol'],
+                ['/case-studies/audius', 'Audius'],
+                ['/case-studies/fleek', 'Fleek'],
+                ['/case-studies/likecoin', 'LikeCoin'],
+                ['/case-studies/morpheus', 'Morpheus.Network'],
+                ['/case-studies/snapshot', 'Snapshot']
+              ]
+            },
+          ]
+        }
       }
     }
   },
   plugins: [
     [require('./plugins/vuepress-plugin-speedcurve'), { id: SPEEDCURVE_ID }],
     '@vuepress/plugin-back-to-top',
-    [
-      '@vuepress/google-analytics',
-      {
-        ga: 'UA-96910779-15'
-      }
-    ],
+    ['@adamdehaven/vuepress-plugin-custom-tooltip'],
     [
       'vuepress-plugin-clean-urls',
       {
@@ -433,8 +508,16 @@ module.exports = {
         defaultTitle: ''
       }
     ],
+    [
+      '@vuepress/search',
+      {
+        searchMaxSuggestions: 10
+      }
+    ],
     'vuepress-plugin-chunkload-redirect',
-    'vuepress-plugin-ipfs'
+    'vuepress-plugin-ipfs',
+    'vuepress-plugin-mermaidjs',
+    'tabs'
   ],
   extraWatchFiles: ['.vuepress/nav/en.js']
 }

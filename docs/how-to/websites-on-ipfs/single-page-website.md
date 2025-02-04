@@ -7,6 +7,10 @@ description: Learn how to host a simple one-page website on IPFS and link up a d
 
 In this tutorial, we will host a simple one-page website on IPFS and link up a domain name. This is the first step is a series of tutorials to teach web developers on how to build websites and applications using IPFS.
 
+::: callout
+If you are looking for [single-page application (SPA)](https://en.wikipedia.org/wiki/Single-page_application) support, see [redirects and custom 404s](../../how-to/websites-on-ipfs/redirects-and-custom-404s.md) instead.
+:::
+
 ## Install IPFS desktop
 
 IPFS desktop application is the easiest way to get up and running quickly with IPFS. The installation steps for IPFS desktop differ between operating systems. Follow the instructions for your system.
@@ -184,7 +188,7 @@ The next step is to import your site into IPFS using the IPFS desktop app you ju
    ```
 
 2. Open IPFS desktop and go to the **Files** page.
-3. Click **Add** → **File**.
+3. Click **+Import** → **File**.
 4. Navigate to your `index.html` file and select **Open**.
 
    ![Choose a file window open in IPFS desktop.](./images/single-page-website/add-ipfs-desktop-open-file.png)
@@ -208,7 +212,7 @@ However, if you want your IPFS data to remain accessible when your local IPFS no
 
 ### Collaborative clusters
 
-IPFS collaborative clusters are groups of IPFS nodes that collaboratively pin all content added to the IPFS Cluster by one or many trusted peers. You can learn more about collaborative clusters, including how to set up a cluster yourself, from [cluster.ipfs.io](https://cluster.ipfs.io/documentation/collaborative/setup/)
+IPFS collaborative clusters are groups of IPFS nodes that collaboratively pin all content added to the IPFS Cluster by one or many trusted peers. You can learn more about collaborative clusters, including how to set up a cluster yourself, from [ipfscluster.io](https://ipfscluster.io/documentation/collaborative/setup/)
 
 ### Pinning services
 
@@ -251,6 +255,6 @@ Domain name services are fairly slow to update. You should be able to go to your
 ## Up next
 
 This project was designed to get you up and running quickly, but there are many improvements we can make here.
-
-You may have noticed that when visiting [randomplanetfacts.xyz](http://randomplanetfacts.xyz), your browser redirects to [gateway.pinata.cloud/ipfs/QmW7S5HR...](https://gateway.pinata.cloud/ipfs/QmW7S5HRLkP4XtPNyT1vQSjP3eRdtZaVtF6FAPvUfduMjA). This isn't great for the user's experience, and it can cause issues with security certificates and other website validation methods. Also, this website is incredibly simple. There are no images, external stylesheets, or javascript files. 
+ 
 If you're interested in building a more complex site using IPFS and securing it properly, [carry on with this tutorial series by hosting a multipage website on IPFS.](multipage-website.md)
+

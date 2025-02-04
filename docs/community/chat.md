@@ -13,7 +13,7 @@ Join the [IPFS Discord server](https://discord.gg/ipfs) for synchronous chat! [S
 
 ## Matrix
 
-Join the [Matrix space](https://matrix.to/#/#ipfs-space:ipfs.io). [Homeserver documentation is available on Notion](https://pl-strflt.notion.site/IPFS-Matrix-Homeserver-Documentation-31481e76843547b7ab5160a87eed2b9f).
+Join the [Matrix space](https://matrix.to/#/#ipfs-space:ipfs.io). [Home server documentation is available on Notion](https://pl-strflt.notion.site/IPFS-Matrix-Homeserver-Documentation-31481e76843547b7ab5160a87eed2b9f).
 
 ## Slack
 
@@ -21,4 +21,4 @@ Join [Filecoin slack](https://filecoin.io/slack) and join the bridged #ipfs chan
 
 ## Forums
 
-For longer-lived discussions and for support, please use the discussion forums at [https://discuss.ipfs.io](https://discuss.ipfs.io) instead! It’s easy for complex discussions to get lost in a sea of new messages on chat, and posting longer discussions and support requests on the forums help future visitors, too.
+For longer-lived discussions and for support, please use the discussion forums at [https://discuss.ipfs.tech](https://discuss.ipfs.tech) instead! It’s easy for complex discussions to get lost in a sea of new messages on chat, and posting longer discussions and support requests on the forums help future visitors, too.

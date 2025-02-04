@@ -22,6 +22,10 @@ In computer security, an access-control list (ACL) is a list of permissions asso
 
 ADL is short for _Advanced Data Layout_, a concept in [IPLD](#ipld). See [IPLD docs](https://ipld.io/glossary/#adl).
 
+### Amino
+
+Formerly referred to as the "public DHT", Amino is the public Kademlia-based [DHT](#dht) that [Kubo](#kubo) and other implementations default to bootstrapping into with the [libp2p](#libp2p) protocol `/ipfs/kad/1.0.0`. See the [blog post](https://blog.ipfs.tech/2023-09-amino-refactoring/) for more info.
+
 ### Announcing
 
 Announcing is a function of the IPFS networking layer in [libp2p](#libp2p), wherein a peer can tell other peers that it has data blocks available.
@@ -50,7 +54,7 @@ Case-sensitive [Multibase](#multibase), uses modified Base64 with URL and filena
 
 ### Bitswap
 
-Bitswap is IPFS's central block exchange protocol. Its purpose is to request blocks from and send blocks to other peers in the network. [More about Bitswap](https://github.com/ipfs/specs/blob/master/BITSWAP.md)
+Bitswap is IPFS's central block exchange protocol. Its purpose is to request blocks from and send blocks to other peers in the network. [More about Bitswap](../concepts/bitswap.md)
 
 ### BitTorrent
 
@@ -66,13 +70,13 @@ A Block is a binary blob of data identified by a [CID](#cid). It could be raw by
 
 ### Bootstrap node
 
-A Bootstrap Node is a trusted peer on the IPFS network through which an IPFS node learns about other peers on the network. Both Kubo and js-ipfs use bootstrap nodes to enter the Distributed Hash Table (DHT). See [Bootstrap](../concepts/nodes/#bootstrap)
+A Bootstrap Node is a trusted peer on the IPFS network through which an IPFS node learns about other peers on the network. Both Kubo and js-ipfs use bootstrap nodes to enter the Distributed Hash Table (DHT). See [Bootstrap](../concepts/nodes.md#bootstrap)
 
 ## C
 
 ### CAR
 
-The CAR (Content Addressable aRchives) is a format for serialized representation of any [IPLD](#ipld) [DAG](#dag). Typically in a file with a .car filename extension or a byte stream marked as [application/vnd.ipld.car](https://www.iana.org/assignments/media-types/application/vnd.ipld.car) media type. [More about CAR](https://ipld.io/specs/transport/car/)
+The CAR (Content Addressable aRchives) is a format for serialized representation of any [IPLD](#ipld) [DAG](#dag). The CAR format is a way of packaging up content-addressed data into archive files that can be easily stored and transferred. Typically in a file with a `.car` filename extension or a byte stream marked as [application/vnd.ipld.car](https://www.iana.org/assignments/media-types/application/vnd.ipld.car) media type. [More about CAR](https://ipld.io/specs/transport/car/)
 
 ### CAR v1
 
@@ -100,7 +104,7 @@ Version 1 (v1) of the IPFS content identifier. This CID version contains some le
 
 ### Circuit relay
 
-A [libp2p](#libp2p) term for transport protocol that routes traffic between two peers over a third-party [_relay_ peer](#relay). [More about Circuit Relay](https://docs.libp2p.io/concepts/circuit-relay/).
+A [libp2p](#libp2p) term for transport protocol that routes traffic between two peers over a third-party [_relay_ peer](#relay-node). [More about Circuit Relay](https://docs.libp2p.io/concepts/circuit-relay/).
 
 ### Circuit relay v1
 
@@ -116,7 +120,7 @@ A function that encodes or decodes serial data into and from some data model. In
 
 ### Content addressing
 
-A way to store information so a device can retrieve the data based on its content, not its location. [Learn how IPFS uses content addressing](/concepts/how-ipfs-works/#content-addressing).
+A way to store information so a device can retrieve the data based on its content, not its location. [Learn how IPFS uses content addressing](../concepts/how-ipfs-works.md#content-addressing).
 
 ### CRDT
 
@@ -146,7 +150,7 @@ DAG-CBOR is a [codec](#codec) that implements the [IPLD Data Model](https://ipld
 
 ## DAG-PB
 
-DAG-PB is a [codec](#codec) that implements a very small subset of the [IPLD Data Model](https://ipld.io/glossary/#data-model) in a particular set of [Protobuf](#protobuf) messages used in IPFS for defining how [UnixFS](#UnixFS)v1 data is serialized. [More about DAG-PB](https://ipld.io/specs/codecs/dag-pb/spec/)
+DAG-PB is a [codec](#codec) that implements a very small subset of the [IPLD Data Model](https://ipld.io/glossary/#data-model) in a particular set of [Protobuf](#protobuf) messages used in IPFS for defining how [UnixFS](#unixfs)v1 data is serialized. [More about DAG-PB](https://ipld.io/specs/codecs/dag-pb/spec/)
 
 ### Data model
 
@@ -160,9 +164,13 @@ The Datastore is the on-disk storage system used by an IPFS node. Configuration 
 
 Direct Connection Upgrade through Relay (DCUtR) protocol enables [hole punching](#hole-punching) for NAT traversal when port forwarding is not possible. A peer will coordinate with the counterparty using a [relayed connection](#circuit-relay-v2), to upgrade to a direct connection through a NAT/firewall whenever possible. [More about DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md)
 
-### Delegate routing node
+### Delegated routing
 
-[Kubo](#kubo) nodes with a subset of RPC API commands exposed. JS-IPFS nodes use them to query the DHT and also publish content without having to actually run DHT logic on their own. See [Delegate routing](../concepts/nodes/#types)
+Delegated routing is a mechanism by which IPFS implementations can offload content routing, peer routing, and naming (IPNS) to another process/server. The most widely adopted vendor-agnostic spec for delegated routing is the [Delegated Routing V1 HTTP API](https://specs.ipfs.tech/routing/http-routing-v1/) with [public utility instance at `delegated-ipfs.dev/routing/v1`](../concepts/public-utilities.md#delegated-routing).
+
+Delegated routing is useful in browsers and other constrained environments where it's infeasible to be a DHT client/server. More broadly, it enables experimentation and innovation in content routing while maintaining interoperability and modularity.
+
+[More about delegated routing](../concepts/nodes.md#types)
 
 ### DHT
 
@@ -194,13 +202,13 @@ The Decentralized Web (DWeb) looks like today's World Wide Web, but it is built 
 
 ### Filestore
 
-An experimental data store used when `--nocopy` is passed to `ipfs add`. It stores the [UnixFS](#unixfs) data components of blocks as files on the file system instead of as blocks. This allows adding content to IPFS without duplicating the content in the IPFS datastore. [More about Filestore experiment](https://github.com/ipfs/kubo/blob/master/docs/experimental-features.md#ipfs-filestore)
+An experimental data store in [Kubo](#kubo). Used when `--nocopy` is passed to `ipfs add`. It stores the [UnixFS](#unixfs) data components of blocks as files on the file system instead of as blocks. This allows adding content to IPFS without duplicating the content in the IPFS datastore. [More about Filestore experiment](https://github.com/ipfs/kubo/blob/master/docs/experimental-features.md#ipfs-filestore)
 
 ## G
 
 ### Gateway
 
-An IPFS Gateway acts as a bridge between traditional web browsers and IPFS. Through the gateway, users can browse files and websites stored in IPFS as if they were stored on a traditional web server. [More about Gateway](../concepts/ipfs-gateway.md) and [addressing IPFS on the web](../how-to/address-ipfs-on-web.md)
+An IPFS Gateway is an HTTP server that acts as a bridge between web browsers and IPFS. Through a gateway, users can browse files and websites stored in IPFS as if they were stored on a HTTP web server. Most commonly, an IPFS Gateway is an IPFS node that also exposes an HTTP IPFS Gateway endpoint. See [more about Gateway](../concepts/ipfs-gateway.md), [addressing IPFS on the web](../how-to/address-ipfs-on-web.md), and [HTTP Gateway specifications](https://specs.ipfs.tech/http-gateways/)
 
 ### Garbage Collection
 
@@ -212,11 +220,11 @@ Old name of [Kubo](#kubo).
 
 ### Graph
 
-In computer science, a Graph is an abstract data type from the field of graph theory within mathematics. The [Merkle-DAG](#merkledag) used in IPFS is a specialized graph.
+In computer science, a Graph is an abstract data type from the field of graph theory within mathematics. The [Merkle-DAG](#merkle-dag) used in IPFS is a specialized graph.
 
 ### Graphsync
 
-Graphsync is an alternative content replication protocol under discussion, similar to [Bitswap](#bitswap). Like Bitswap, the primary job is to synchronize data blocks across peers. [More about Graphsync](https://github.com/ipld/specs/blob/master/block-layer/graphsync/graphsync.md)
+Graphsync is a legacy content replication protocol, similar to [Bitswap](#bitswap), but focusing on graphs rather than blocks. It is not supported by [Kubo](#kubo) due to protocol complexity, and [IPIP-402](https://specs.ipfs.tech/ipips/ipip-0402/) providing a simpler way of synchronizing partial [DAGs](#dag). [More about Graphsync](https://github.com/ipld/specs/blob/master/block-layer/graphsync/graphsync.md)
 
 ## H
 
@@ -228,6 +236,10 @@ The sharding technique used for [sharding](#sharding) big UnixFS directories. It
 
 A Cryptographic Hash is a function that takes some arbitrary input (content) and returns a fixed-length value. The exact same input data will always generate the same hash as output. There are numerous hash algorithms. [More about Hash](hashing.md)
 
+### Helia
+
+A lean, modular, and modern implementation of IPFS for the JS and browser environments that supersedes [js-ipfs](#js-ipfs). Learn more at [https://github.com/ipfs/helia](https://github.com/ipfs/helia).
+
 ### Hole punching
 
 A  technique for [NAT](#nat) or firewall traversal that relies on coordinated simultaneous connections.  Used when port forwarding is not possible. [See DCUtR](#dcutr)
@@ -238,9 +250,21 @@ A  technique for [NAT](#nat) or firewall traversal that relies on coordinated si
 
 Information Space is the set of concepts, and relations among them, held by an information system. This can be thought of as a conceptual framework or tool for studying how knowledge and information are codified, abstracted, and diffused through a social system. [More about Information Space](https://en.wikipedia.org/wiki/Information_space)
 
+### IPFS Desktop
+
+An unobtrusive and user-friendly desktop application for IPFS on Windows, macOS and Linux. Uses [Kubo](#kubo) implementation as IPFS backend. See: [Install the IPFS Desktop App](../install/ipfs-desktop.md).
+
+### IPFS Mainnet
+
+See [Mainnet](#mainnet).
+
 ### IPLD
 
 The InterPlanetary Linked Data (IPLD) model is a set of specifications in support of decentralized data structures for the content-addressable web. Key features are interoperable protocols, easily upgradeable, backward compatible. A single namespace for all hash-based protocols. [More about IPLD](https://ipld.io/)
+
+### IPNI
+
+The InterPlanetary Network Indexer (IPNI), also referred to as Network Indexer, indexer and IPNI, enables quick and efficient search of content-addressable data. IPNI is designed to improve the performance and efficiency of IPFS by providing an alternate method of content routing to the [Amino](#amino) DHT. [More about IPNI](../concepts/ipni.md)
 
 ### IPNS
 
@@ -250,7 +274,7 @@ The InterPlanetary Name System (IPNS) is a system for creating and updating muta
 
 ### JS-IPFS
 
-An implementation of IPFS written entirely in JavaScript. It runs in a Browser, a Service Worker, Electron and Node.js.  See [Nodes > JS-IPFS](../concepts/nodes/#js-ipfs)
+A legacy implementation of IPFS written entirely in JavaScript. The [js-ipfs is deprecated](https://github.com/ipfs/js-ipfs?tab=readme-ov-file#%EF%B8%8F-deprecated-js-ipfs-has-been-superseded-by-helia) and superseded by [Helia](#helia).
 
 ### JSON
 
@@ -260,7 +284,7 @@ JavaScript Object Notation (JSON) is a lightweight data-interchange format. JSON
 
 ### Kubo
 
-AKA [go-ipfs](#go-ipfs). The earliest and most widely used implementation of IPFS, written in Go. It runs on servers and user machines with full IPFS capabilities. See [Nodes > Kubo](../concepts/nodes/#kubo).
+Kubo (previously known as [go-ipfs](#go-ipfs)) is the earliest and most widely used implementation of IPFS, written in Go. It runs on servers and user machines with full IPFS capabilities. [Install IPFS Kubo](../install/command-line.md) or see [Kubo README](https://github.com/ipfs/kubo#readme).
 
 ## L
 
@@ -286,6 +310,10 @@ In IPFS and [IPLD](#ipld), a _link_ usually means a pointer to some [CID](#cid).
 
 ## M
 
+### Mainnet
+
+IPFS Mainnet is a term used to describe the default or "main" public network that most IPFS implementations connect to by default. Most [IPFS implementations](https://specs.ipfs.tech/architecture/principles/#ipfs-implementation-requirements) were designed to work with Mainnet (but some can be configured instead to form a private swarm). Mainnet IPFS nodes typically join the [Amino DHT](#amino) for content routing with the help of the [Bootstrap nodes](#bootstrap-node), rely on [Bitswap](#bitswap) for data transfer, [UnixFS](#unixfs) for encoding files and directories, and typically expose an [IPFS Gateway](#gateway). This has mostly been assumed for the IPFS network. Nonetheless, IPFS Mainnet is a useful distinction in a world of many [IPFS implementations](../concepts/implementations.md) with varying degrees of interoperability.
+
 ### Merkle-DAG
 
 The Merkle-DAG is a computer science data structure used at the core of IPFS files/block storage. Merkle-DAGs create a hash to their content, known as a [Content Identifier](#cid). [More about Merkle-DAG](merkle-dag.md)
@@ -304,7 +332,7 @@ The Mutable File System (MFS) is a tool built into IPFS that lets you treat file
 
 ### Multiaddr
 
-Multiaddr is a way to create self-describing, composable and future-proof network addresses. In [libp2p](#libp2p), it is used in [peer](#peer) addressing. [More about Multiaddr](https://github.com/multiformats/multiaddr)
+Multiaddr is a way to create self-describing, composable and future-proof network addresses. In [libp2p](#libp2p), it is used in [peer](#peer) addressing. To learn more read [Addressing in libp2p →](https://github.com/libp2p/specs/blob/master/addressing/README.md) and [Multiaddr Specification →](https://github.com/multiformats/multiaddr)
 
 ### Multibase
 
@@ -316,11 +344,19 @@ Multicodec is an identifier indicating the format of the target content. It help
 
 ### Multihash
 
-Multihash is a protocol for differentiating outputs from various well-established hash functions, addressing size and encoding considerations. It is useful to write applications that future-proof their use of hashes, and it allows multiple hash functions to coexist. [More about Multihash](https://multiformats.io/multihash/).
+Multihash is a protocol for differentiating outputs from various well-established hash functions, addressing size and encoding considerations. It is useful to write applications that future-proof their use of hashes, and it allows multiple hash functions to coexist. [More about Multihash](https://github.com/multiformats/multihash).
 
 ### Multiformats
 
-The Multiformats project is a collection of protocols that aim to future-proof systems today. A key element is enhancing format values with self-description. This allows for interoperability, protocol agility, and promotes extensibility. [More about Multiformats](https://multiformats.io/) and [Multihash](https://multiformats.io/multihash/)
+The Multiformats project is a collection of protocols that aim to future-proof systems today. A key element is enhancing format values with self-description. This allows for interoperability, protocol agility, and promotes extensibility. [More about Multiformats](https://multiformats.io/) and [Multihash](https://github.com/multiformats/multihash)
+
+### Multiplexer
+
+Multiplexing allows for the creation of multiple “virtual” connections within a single [libp2p](#libp2p) connection. [More about Stream Multiplexing in libp2p docs](https://docs.libp2p.io/concepts/multiplex/overview/)
+
+### Mplex
+
+mplex is a deprecated stream multiplexer that was designed in the early days of [libp2p](#libp2p). [More about mplex](https://docs.libp2p.io/concepts/multiplex/mplex/)
 
 ## N
 
@@ -330,7 +366,7 @@ Network Address Translation (NAT) enables communication between two networks by 
 
 ### Node
 
-In IPFS, a node or [peer](#peer) is the IPFS program that you run on your local computer to store files and then connect to the IPFS network. See [Nodes](../concepts/nodes/#nodes).
+In IPFS, a node or [peer](#peer) is the IPFS program that you run on your local computer to store files and then connect to the IPFS network. See [Nodes](../concepts/nodes.md#nodes).
 
 ### Node (in graphs)
 
@@ -350,6 +386,10 @@ A Path/Address is the method within IPFS of referencing content on the web. Addr
 
 In system architecture, a Peer is an equal player in the peer-to-peer model of decentralization, as opposed to the client-server model of centralization. [See also Peer as Node](#node)
 
+### Peer routing
+
+Peer routing is the process of discovering the network _route_ or address for a network peer using various methods. The primary peer routing mechanism in IPFS is a distributed hash table that uses the [Kademlia routing algorithm](dht.md#lookup-algorithm) to efficiently locate peers. However, other methods, like local discovery, are also used. Learn more in the [libp2p documentation](https://docs.libp2p.io/concepts/).
+
 ### Peer ID
 
 A Peer ID is how each unique IPFS node is identified on the network. The Peer ID is created when the IPFS node is initialized and is essentially a cryptographic hash of the node's public key. [More about Peer ID](dht.md#peer-ids)
@@ -364,7 +404,7 @@ A vendor-agnostic [API specification](https://ipfs.github.io/pinning-services-ap
 
 ### Preload node
 
-Part of the process of making a UnixFS DAG publicly available via the preload node's `wantlist`, causing it to fetch data. Other nodes requesting the content can then resolve it from the preload node using Bitswap, as the data is now present in the preload node’s blockstore. See [Nodes > Preload](https://docs.ipfs.tech/concepts/nodes/#preload).
+Part of the process of making a UnixFS DAG publicly available via the preload node's `wantlist`, causing it to fetch data. Other nodes requesting the content can then resolve it from the preload node using Bitswap, as the data is now present in the preload node’s blockstore. See [Nodes > Preload](../concepts/nodes.md#preload).
 
 ### Protobuf
 
@@ -376,11 +416,15 @@ Publish-subscribe (Pubsub) is an experimental feature in IPFS. Publishers send m
 
 ## Q
 
+### QUIC
+
+QUIC (`/quic-v1`) is one of [libp2p](#libp2p) [transport](#transport) protocols. It provides an always-encrypted, stream-multiplexed connection built on top of UDP. [More about QUIC in libp2p](https://docs.libp2p.io/concepts/transports/quic/)
+
 ## R
 
 ### Relay node
 
-A means to establish connectivity between libp2p nodes (e.g., IPFS nodes) that wouldn't otherwise be able to establish a direct connection to each other. This may be due to nodes that are behind NAT (Network Address Translation), reverse proxies, firewalls, etc. See [Nodes > Relay](../concepts/nodes/#relay)
+A means to establish connectivity between libp2p nodes (e.g., IPFS nodes) that wouldn't otherwise be able to establish a direct connection to each other. This may be due to nodes that are behind NAT (Network Address Translation), reverse proxies, firewalls, etc. See [Nodes > Relay](../concepts/nodes.md#relay) and [libp2p docs about Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/).
 
 ### Remote Pinning
 
@@ -388,7 +432,7 @@ A variant of [pinning](#pinning) that uses a third-party service to ensure that 
 
 ### Repo
 
-The Repository (Repo) is a directory where IPFS stores all its settings and internal data. It is created with the `ipfs init` command. [More about Repo](../how-to/command-line-quick-start.md#install-ipfs)
+The Repository (Repo) is a directory where IPFS stores all its settings and internal data. In [Kubo](#kubo) it is created with the `ipfs init` command. [More about Repo in Kubo](../how-to/command-line-quick-start.md#install-ipfs)
 
 ### Root
 
@@ -438,7 +482,7 @@ _Swarm_ is a term for the network of IPFS peers with which your local node has c
 
 In [libp2p](#libp2p), a _switch_ is a component responsible for composing multiple [transports](#transport) into a single interface, allowing application code to [dial](#dialing) peers without having to specify which transport to use.
 
-Switches also coordinate the _connection upgrade_ process, which promotes a _raw_ connection from the transport layer into one that supports [protocol negotiation](https://docs.libp2p.io/concepts/protocols/#protocol-negotiation), [stream multiplexing](../concepts/libp2p/#stream-multiplexing), and secure communications.
+Switches also coordinate the _connection upgrade_ process, which promotes a _raw_ connection from the transport layer into one that supports [protocol negotiation](https://docs.libp2p.io/concepts/protocols/#protocol-negotiation), [stream multiplexing](../concepts/libp2p.md#stream-multiplexing), and secure communications.
 
 Sometimes called [swarm](#swarm) for historical reasons.
 
@@ -446,7 +490,7 @@ Sometimes called [swarm](#swarm) for historical reasons.
 
 ### Transport
 
-In [libp2p](#libp2p), transport refers to the technology that lets us move data from one machine to another. This may be a TCP network, a WebSocket connection in a browser, or anything else capable of implementing the transport interface.
+In [libp2p](#libp2p), transport refers to the technology that lets us move data from one machine to another. This may be a TCP, UDP ([QUIC](#quic)) network, a [WebSocket](#websocket) connection in a browser, or anything else capable of implementing the transport interface. [More about libp2p transports](https://docs.libp2p.io/concepts/transports/overview/)
 
 ### Traversal
 
@@ -460,7 +504,7 @@ The Unix File System (UnixFS) is the data format used to represent files and all
 
 ### Urlstore
 
-An experimental data store similar to [`filestore`](#filestore), but it retrieves blocks contents via a HTTP URL instead of a local filesystem. [More about urlstore experiment](https://github.com/ipfs/kubo/blob/master/docs/experimental-features.md#ipfs-urlstore)
+An experimental data store in [Kubo](#kubo) similar to [`filestore`](#filestore), but it retrieves blocks contents via a HTTP URL instead of a local filesystem. [More about urlstore experiment](https://github.com/ipfs/kubo/blob/master/docs/experimental-features.md#ipfs-urlstore)
 
 ## V
 
@@ -470,8 +514,24 @@ An experimental data store similar to [`filestore`](#filestore), but it retrieve
 
 Wide Area Network (WAN) is a type of (usually public) computer network that spans over a large geographic area. [More about WAN](https://en.wikipedia.org/wiki/Wide_area_network)
 
+### WebRTC
+
+WebRTC (Web Real-Time Communications) is a framework for real-time communication and in libp2p is used to establish browser-to-server and browser-to-browser connections between applications. [Libp2p](#libp2p) supports WebRTC as multiple [transports](#transport) (`/webrtc`, `/webrtc-direct`). [More about WebRTC in libp2p](https://docs.libp2p.io/concepts/transports/webrtc/)
+
+### WebSocket
+
+WebSockets are a way for web applications to maintain bidirectional communications with server-side processes, and are one of [transports](#transport) supported by [libp2p](#libp2p) (`/ws`). [More about libp2p WebSockets support](https://github.com/libp2p/specs/blob/master/websockets/README.md)
+
+### WebTransport
+
+WebTransport is a new specification that uses QUIC to offer an alternative to [WebSocket](#websocket). Conceptually, it can be considered WebSocket over [QUIC](#quic). [Libp2p](#libp2p) supports is indicated by `/webtransport` [Multiaddr](#multiaddr). [More about WebTransport in libp2p](https://docs.libp2p.io/concepts/transports/webtransport/)
+
 ## X
 
 ## Y
+
+### Yamux
+
+Yamux (Yet another Multiplexer) is a powerful stream [multiplexer](#multiplexer) used in [libp2p](#libp2p). [More about Yamux in libp2p docs](https://docs.libp2p.io/concepts/multiplex/yamux/)
 
 ## Z

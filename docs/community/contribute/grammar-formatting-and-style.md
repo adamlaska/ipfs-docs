@@ -149,7 +149,7 @@ In the wise words of Winnie the Pooh _"People say nothing is impossible, but I d
 
 #### Code blocks
 
-Tag code blocks with the syntax of the core they are presenting:
+Tag code blocks with the syntax of the code they are presenting:
 
 ````markdown
     ```javascript
@@ -212,7 +212,7 @@ List items end with a period `.`, or a colon `:` if the list item has a sub-list
    3. David Copperfield.
 2. J.R.R Tolkien non-fiction books:
    1. The Hobbit.
-   2. Silmarillion.
+   2. The Silmarillion.
    3. Letters from Father Christmas.
 
 ##### Unordered lists

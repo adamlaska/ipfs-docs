@@ -5,13 +5,12 @@ description: A quick guide to the most important and most frequently used IPFS r
 
 # IPFS repository guide
 
-IPFS is a _big_ open-source project, and with that comes a lot of code — and a lot of issue-based discussion that goes with it. The IPFS project uses GitHub both for code development and for road mapping and operations discussions, meaning that both types of activities can happen asynchronously, in the open, and from anywhere on the planet.
+IPFS is an _extensive_ open-source project, and with that comes a lot of code and issue-based discussions. The IPFS project uses GitHub for both code development and road mapping and operations discussions, meaning that both types of activities can happen asynchronously, in the open, and from anywhere on the planet.
 
 If you're looking for specific IPFS-related code, or want to find where to join in a particular discussion, start with this high-level guide to the most prominent and/or frequently used GitHub organizations and repositories in the IPFS project. It's not an exhaustive list of all IPFS organizations and repositories, but instead is intended to help guide you based on what you are trying to do in the following areas:
 
 - [Fetching or contributing to IPFS code](#fetch-or-contribute-to-ipfs-code)
 - [Participating in IPFS project operations](#participate-in-ipfs-project-operations)
-- [Discussing ideas for using IPFS](#discuss-ideas-for-using-ipfs)
 
 ## Fetch or contribute to IPFS code
 
@@ -19,10 +18,18 @@ Organization and repository links for the top-level projects shipped as part of 
 
 ### Protocol implementations
 
+:::warning 
+### js-ipfs being discontinued
+Development of the [js-ipfs project](https://github.com/ipfs/js-ipfs) is being discontinued to focus on [Helia](https://github.com/ipfs/helia), a leaner, more modular, modern implementation of IPFS in JavaScript that was released in 2023. To learn more about Helia and the current state of IPFS in JS, see the [blog post](https://blog.ipfs.tech/state-of-ipfs-in-js/).
+
+Because of this, js-ipfs tutorials may be out of date, and will eventually be archived.
+
+:::
+
 - [Kubo](https://github.com/ipfs/kubo): The reference implementation written in Go.
 - [js-ipfs](https://github.com/ipfs/js-ipfs): The JavaScript implementation of IPFS.
 - [rust-ipfs](https://github.com/rs-ipfs/rust-ipfs): Alpha implementation in Rust.
-- [Other implementations](https://github.com/ipfs/ipfs#protocol-implementations): Up-to-date links to all other protocol implementations.
+- [Other implementations](../concepts/ipfs-implementations.md): Up-to-date links to all other protocol implementations.
 
 ### Client implementations
 
@@ -30,19 +37,19 @@ Organization and repository links for the top-level projects shipped as part of 
 
 ### Underlying components
 
-- [libp2p](https://github.com/libp2p):
-  - [go-libp2p](https://github.com/libp2p/go-libp2p): Reference libp2p implementation in Go.
-  - [js-libp2p](https://github.com/libp2p/js-libp2p): The JavaScript implementation of the libp2p networking stack.
-  - [rust-libp2p](https://github.com/libp2p/rust-libp2p): The Rust implementation of the libp2p networking stack.
-- [IPLD](https://github.com/ipld):
-  - [go-ipld](https://github.com/ipld/go-ipld): Entry-point repo for Go IPLD development.
-  - [js-ipld](https://github.com/ipld/js-ipld): The JavaScript Implementation of IPLD.
-  - [IPLD specifications](https://github.com/ipld/specs): The set of specifications that make up IPLD.
-- [Multiformats](https://github.com/multiformats):
-  - [Multiaddr](https://github.com/multiformats/multiaddr): Composable and future-proof network addresses.
-  - [Multibase](https://github.com/multiformats/multibase): Self-identifying base encodings.
-  - [Multicodec](https://github.com/multiformats/multicodec): Compact, self-describing codecs.
-  - [Multihash](https://github.com/multiformats/multihash): Self-describing hashes for future-proofing.
+| Subsystem  | Go                                                                  | JavaScript                     | Rust                            |
+|------------|---------------------------------------------------------------------------------------|-------------------------------------------------|------------------------------------------------|
+| [LibP2P](https://github.com/libp2p)     | [ go-libp2p ]( https://github.com/libp2p/go-libp2p )                                  | [js-libp2p](https://github.com/libp2p/js-libp2p)             | [rust-libp2p](https://github.com/libp2p/rust-libp2p)          |
+| [IPLD](https://github.com/ipld)       | [ go-ipld ]( https://github.com/ipld/go-ipld ), [go-ipld-prime](https://github.com/ipld/go-ipld-prime) | [js-ipld](https://github.com/ipld/js-ipld)                 | [libipld](https://github.com/ipld/libipld)                |
+| IPNS       | [go-ipns](https://github.com/ipfs/go-ipns)                                                       | [js-ipns](https://github.com/ipfs/js-ipns)                 | [rust-ipns](https://lib.rs/crates/rust-ipns)                |
+| [Multiaddr](https://github.com/multiformats/multiaddr)  | [go-multiaddr](https://github.com/multiformats/go-multiaddr)                                          | [js-multiaddr](https://github.com/multiformats/js-multiaddr)    | [rust-multiaddr](https://github.com/multiformats/rust-multiaddr) |
+| [Multicodec](https://github.com/multiformats/multicodec) | [go-multicodec](https://github.com/multiformats/go-multicodec)                                         | [js-multiformats](https://github.com/multiformats/js-multiformats) | N/A                                            |
+| [Multihash](https://github.com/multiformats/multihash)  | [go-multihash](https://github.com/multiformats/go-multihash)                                          | [js-multiformats](https://github.com/multiformats/js-multiformats) | [rust-multihash](https://github.com/multiformats/rust-multihash) |
+| [Multibase](https://github.com/multiformats/multibase)  | [go-multibase](https://github.com/multiformats/go-multibase)                                          | [js-multiformats](https://github.com/multiformats/js-multiformats) | [rust-multibase](https://github.com/multiformats/rust-multibase) |
+| CID        | N/A                                                                                   | [js-multiformats](https://github.com/multiformats/js-multiformats) | [rust-cid](https://github.com/multiformats/rust-cid)       |
+
+
+
 
 ### IPFS tools and products
 
@@ -67,19 +74,10 @@ IPFS project operations at large are also captured in GitHub. These repos don't 
 
 ### Operations discussions and tools
 
-- [IPFS Community](https://github.com/ipfs/community)
 - [IPFS Project Roadmap](https://github.com/ipfs/roadmap)
 - [IPFS Specifications](https://github.com/ipfs/specs)
 - [IPFS Infrastructure](https://github.com/ipfs/infra)
-- [IPFS Team Planning, Management, and Coordination](https://github.com/ipfs/team-mgmt)
 
 ### Internationalization
 
 - [i18n](https://github.com/ipfs-shipyard/i18n): The IPFS Translation Project, crowdsourcing translations of IPFS GUIs and websites.
-
-## Discuss ideas for using IPFS
-
-As with the IPFS project operations repos, these repositories don't necessarily contain code but instead capture discussions, ideas, and linked artifacts in an issue-driven format.
-
-- [ipfs/notes](https://github.com/ipfs/notes): IPFS collaborative notebook for research.
-- [ipfs/community](https://github.com/ipfs/community/discussions): IPFS community discussions board.

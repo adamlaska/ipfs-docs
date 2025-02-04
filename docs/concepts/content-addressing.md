@@ -1,26 +1,94 @@
 ---
-title: Content addressing
+title: Content Identifiers (CIDs)
 description: Learn about how content addressing works and how content identifiers, or CIDs, play a crucial role in IPFS.
 ---
 
-# Content addressing and CIDs
+# Content Identifiers (CIDs)
 
-::: callout
-For a deep dive into how Content Identifiers (CIDs) are constructed, take a look at ProtoSchool's tutorial on the [Anatomy of a CID](https://proto.school/anatomy-of-a-cid).
-:::
+As described in [IPFS and the problems it solves](../concepts/what-is-ipfs.md), IPFS is a modular suite of protocols purpose built for the organization and transfer of <VueCustomTooltip label="A way to address data by its hash rather than its location (IPs)." underlined multiline>content-addressed data</VueCustomTooltip>. In this guide, you'll learn more about the fundamentals of content-addressing in IPFS and how IPFS uses Content Identifiers (CIDs) to handle content-addressed data.
 
-[[toc]]
+## What is a CID?
 
 A _content identifier_, or CID, is a label used to point to material in IPFS. It doesn't indicate _where_ the content is stored, but it forms a kind of address based on the content itself. CIDs are short, regardless of the size of their underlying content.
 
 CIDs are based on the content’s [cryptographic hash](hashing.md). That means:
 
-- Any difference in the content will produce a different CID and
+- Any difference in the content will produce a different CID.
 - The same content added to two different IPFS nodes using the same settings will produce _the same CID_.
 
-IPFS uses the `sha-256` hashing algorithm by default, but there is support for many other algorithms. The [Multihash](https://multiformats.io/multihash/) project represents the work for this, with the aim of future-proofing applications' use of hashes and allowing multiple hash functions to coexist. (If you're curious about how hash types in IPFS are decided upon, you may wish to keep an eye on [this forum discussion](https://discuss.ipfs.io/t/who-decides-what-hashing-algorithms-ipfs-allows/6742).)
+IPFS uses the `sha-256` hashing algorithm by default, but there is support for many other algorithms. The [Multihash](https://multiformats.io/multihash/) project represents the work for this, with the aim of future-proofing applications' use of hashes and allowing multiple hash functions to coexist. (If you're curious about how hash types in IPFS are decided upon, you may wish to keep an eye on [this forum discussion](https://discuss.ipfs.tech/t/who-decides-what-hashing-algorithms-ipfs-allows/6742).)
 
-## Identifier formats
+## How CIDs are created
+
+CIDs contain the hash and the codec of the data. A CID can be represented in string or binary format. In general, the CID is generated for each block by:
+
+1. Computing a cryptographic hash of the block's data.
+1. Combining that hash with codec information about the block using <VueCustomTooltip label="A collection of interoperable, extensible standards for making data self-describable." underlined multiline is-medium>multiformats</VueCustomTooltip>:
+   - <VueCustomTooltip label="A standard for differentiating outputs from various well-established hash function." underlined multiline is-medium>Multihash</VueCustomTooltip> for information on the algorithm used to hash the data.
+   - <VueCustomTooltip label="A standard for differentiating the format of the target data." underlined multiline is-medium>Multicodec</VueCustomTooltip> for information on how to interpret the hashed data after it has been fetched.
+   - <VueCustomTooltip label="A standard for differentiating the encoding of base-encoded (e.g., base32, base36, base64, base58, etc.) binary data appearing in text." underlined multiline is-medium>Multibase</VueCustomTooltip> for information on how the hashed data is encoded. Multibase is  only used in the string representation of the CID.
+
+:::callout
+**CIDs will not match the hash of the data**
+While a data block's CID is constructed using the cryptographic hash of the data block, a CID contains additional information (described above) that the hash does not. For further information, see [CIDs are not file hashes](#cids-are-not-file-hashes) below.
+:::
+
+For a break-down of an actual CID, see [this example with the IPFS CID inspector](https://cid.ipfs.tech/#bafybeigrf2dwtpjkiovnigysyto3d55opf6qkdikx6d65onrqnfzwgdkfa).
+
+## CIDs are not file hashes
+
+Hash functions are widely used to check for file integrity. Because IPFS splits content into blocks and verifies them through [directed acyclic graphs (DAGs)](../concepts/merkle-dag.md), SHA file hashes won't match CIDs. Here's an example of what will happen if you try to do that.
+
+A download provider may publish the output of a hash function for a file, often called a _checksum_. The checksum enables users to verify that a file has not been altered since it was published. This check is done by performing the same hash function against the downloaded file that was used to generate the checksum. If that checksum that the user receives from the downloaded file exactly matches the checksum on the website, then the user knows that the file was not altered and can be trusted.
+
+For example, when you download an image file for [Ubuntu Linux](https://ubuntu.com/) you might see the following `SHA-256` checksum on the Ubuntu website listed for verification purposes:
+
+```
+0xB45165ED3CD437B9FFAD02A2AAD22A4DDC69162470E2622982889CE5826F6E3D ubuntu-20.04.1-desktop-amd64.iso
+```
+
+After downloading the Ubuntu image, you can verify the integrity of the file by hashing the file to make sure the checksums match:
+
+```shell
+echo "b45165ed3cd437b9ffad02a2aad22a4ddc69162470e2622982889ce5826f6e3d *ubuntu-20.04.1-desktop-amd64.iso" | shasum -a 256 --check
+
+ubuntu-20.04.1-desktop-amd64.iso: OK
+```
+
+If we add the `ubuntu-20.04.1-desktop-amd64.iso` file to IPFS we receive a hash as an output:
+
+```shell
+ipfs add ubuntu-20.04.1-desktop-amd64.iso
+
+added QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB ubuntu-20.04.1-desktop-amd64.iso
+ 2.59 GiB / 2.59 GiB [==========================================================================================] 100.00%
+```
+
+The string `QmPK1s3pNYLi9ERiq3BDxKa4XosgWwFRQUydHUtz4YgpqB` returned by the `ipfs add` command is the content identifier (CID) of the file `ubuntu-20.04.1-desktop-amd64.iso`. We can use the [CID Inspector](https://cid.ipfs.io/) to see what the CID includes. The actual hash is listed under `DIGEST (HEX)`:
+
+```
+NAME: sha2-256
+BITS: 256
+DIGEST (HEX): 0E7071C59DF3B9454D1D18A15270AA36D54F89606A576DC621757AFD44AD1D2E
+```
+
+::: tip
+The names of hash functions are not used consistently.`SHA-2`, `SHA-256` or `SHA-256 bit` all refer to the same hash function.
+:::
+
+We can now check if the hash contained in the CID equals the checksum for the file:
+
+```shell
+echo "0E7071C59DF3B9454D1D18A15270AA36D54F89606A576DC621757AFD44AD1D2E *ubuntu-20.04.1-desktop-amd64.iso" | shasum -a 256 --check
+
+ubuntu-20.04.1-desktop-amd64.iso: FAILED
+shasum: WARNING: 1 computed checksum did NOT match
+```
+
+As we can see, the hash included in the CID does NOT match the hash of the input file `ubuntu-20.04.1-desktop-amd64.iso`.
+
+
+## CID versions
 
 CIDs can take a few different forms with different encoding bases or CID versions. Many of the existing IPFS tools still generate v0 CIDs, although the `files` ([Mutable File System](file-systems.md#mutable-file-system-mfs)) and `object` operations now use CIDv1 by default.
 
@@ -67,66 +135,73 @@ $ ipfs cid format -v 1 -b base32 QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR
 bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
 ```
 
-JavaScript users can also leverage the `toV1()` method provided by the [`cids`](https://www.npmjs.com/package/cids) library:
-```js
-const CID = require('cids')
-new CID('QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR').toV1().toString('base32')
-// → bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
-```
-
-### Text to binary
-
-A CID can be represented as both text and as a stream of bytes. The latter may be a better choice when speed and storage efficiency are considerations.
-
-To convert a CIDv1 from text to binary form, simply read the first character
-and then decode the remainder using the encoding specified in the [multibase table](https://github.com/multiformats/multibase#multibase-table).
-
-JS users can leverage the [`cids`](https://www.npmjs.com/package/cids) library to get a binary version as `Uint8Array`:
-
+JavaScript users can also leverage the `toV1()` method provided by the [`multiformats`](https://www.npmjs.com/package/multiformats) library:
 
 ```js
-const CID = require('cids')
-new CID('bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi').bytes
-// → Uint8Array [ 1, 112,  18,  32, 195, 196, 115,  62, ... ]
+const v0 = CID.parse('QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n')
+v0.toString()
+//> 'QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n'
+v0.toV1().toString()
+//> 'bafybeihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtenxquvyku'
 ```
 
-::: warning Be mindful about parsing CIDs correctly. Avoid shortcuts.
+### v1 to v0 
 
-Unless you are the one who imported the data to IPFS, the length of a CID is not deterministic and depends on the length of the multihash inside of it.
+Given a CID v1, JS users can convert back to v0 using the `toV0()` method provided by the [`multiformats`](https://www.npmjs.com/package/multiformats) library:
 
-To illustrate, passing a custom hash function will produce CIDs of varying lengths:
-
+```js
+const v1 = CID.parse('bafybeihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtenxquvyku')
+v1.toString()
+//> 'bafybeihdwdcefgh4dqkjv67uzcmw7ojee6xedzdetojuzjevtenxquvyku'
+v1.toV0().toString()
+//> 'QmdfTbBqBPQ7VNxZEYEj14VmRuZBkqFbiwReogJgS1zR1n'
 ```
-$ ipfs add --cid-version 1 --hash sha2-256    -nq cat.jpg | wc -c
-60
-$ ipfs add --cid-version 1 --hash blake2b-256 -nq cat.jpg | wc -c
-63
-$ ipfs add --cid-version 1 --hash sha3-512    -nq cat.jpg | wc -c
-111
+
+:::callout
+**See CID conversion in action**
+See the [interactive code sandbox](#codesandbox-converting-between-cid-versions-and-encodings) for an example JS application that converts between CID versions and encodings.
+:::
+
+### Converting between CID base encodings
+
+A CID can be encoded using any of the encodings specified in the [multibase table](https://github.com/multiformats/multibase#multibase-table). The use of different encodings can impact speed and storage efficiency.
+
+To convert a CIDv1 `cidV1` from one encoding to another, use the `toString()` method. By default, `toString()` will return the `base32` string representation of the CID, but you can use other string representations:
+
+```js
+const cidV1StringBase32 = cidV1.toString();
 ```
+
+The following example returns the base256 emoji encoding of the CID:
+```js
+const cidV1StringBase256 = cidV1.toString(base256emoji);
+```
+
+Using `.bytes`, the following example returns the raw bytes of the CID:
+
+```js
+const cidV1Bytes = cidV1.bytes
+```
+
+:::callout
+**See CID conversion in action**
+See the [interactive code sandbox](#codesandbox-converting-between-cid-versions-and-encodings) for an example JS application that converts between CID versions and encodings.
 :::
 
 
 ### CID to hex
 
-Sometimes, a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) representation of raw bytes is prefered for debug purposes.
-To get the hex for raw `.bytes` of an entire CID, one can use built-in support for `base16` encoding and skip the `f` (multibase prefix):
+Sometimes, a [hexadecimal](https://en.wikipedia.org/wiki/Hexadecimal) representation of raw bytes is preferred for debug purposes.
+To get the hex for raw `.bytes` of a CIDv1 `cidV1`, use `base16` encoding:
 
-```javascript
-> cid.toString('base16')
-'f01701220c3c4733ec8affd06cf9e9ff50ffc6bcd2ec85a6170004bb709669c31de94391a'
-
-> cid.toString('base16').substring(1)
-'01701220c3c4733ec8affd06cf9e9ff50ffc6bcd2ec85a6170004bb709669c31de94391a' // "cid as hex"
+```js
+const cidV1StringBase256 = cidV1.toString(base16);
 ```
 
-To convert back to a CIDv1, prepend the hex value with `f` ([multibase prefix](https://github.com/multiformats/multibase#multibase-table) for lowercase base16).
-Use it as-is (it is a [valid CID](https://ipfs.io/ipfs/f01701220c3c4733ec8affd06cf9e9ff50ffc6bcd2ec85a6170004bb709669c31de94391a)), or convert to a different multibase by passing it as an argument to `toString`:
-
-```javascript
-> new CID('f' +'01701220c3c4733ec8affd06cf9e9ff50ffc6bcd2ec85a6170004bb709669c31de94391a').toString('base32')
-// → bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
-```
+:::callout
+**See CID conversion in action**
+See the [interactive code sandbox](#codesandbox-converting-between-cid-versions-and-encodings) for an example JS application that converts between CID versions and encodings.
+:::
 
 ::: tip
 [Subdomain gateways](../how-to/address-ipfs-on-web.md#subdomain-gateway) convert paths with custom bases like base16 to base32 or base36, in an effort to fit a CID in a DNS label:
@@ -135,6 +210,17 @@ Use it as-is (it is a [valid CID](https://ipfs.io/ipfs/f01701220c3c4733ec8affd06
   → [bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.dweb.link](https://bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi.ipfs.dweb.link/)
 :::
 
+
+### CodeSandbox: Converting between CID versions and encodings
+
+For a hand-on, interactive application that converts between CID versions and encodings, use the CodeSandbox below.
+
+<iframe src="https://codesandbox.io/embed/converting-between-cid-versions-xrvqop?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="Converting between CID versions"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
 
 ## Further resources
 
