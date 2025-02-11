@@ -1,9 +1,9 @@
 <p align="center">
-<img align="center" src="ipfs-docs-header.png" width="1000">
+<img align="center" src="./images/ipfs-docs-header.png" width="1000">
 </p>
 
 <div align="center">
-<h3> IPFS powers the distributed web </h3>
+<h3> IPFS is an open system to manage data without a central server </h3>
 <br>
 
 [![Made by icon.](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg?style=flat-square)](https://protocol.ai/)
@@ -26,7 +26,7 @@
   - [Static-site generator](#static-site-generator)
   - [Automated deployments](#automated-deployments)
   - [Translation](#translation)
-- [Core members](#core-members)
+- [Primary maintainers](#primary-maintainers)
 - [License](#license)
 <!-- /TOC -->
 
@@ -48,22 +48,27 @@ To build the site locally, follow the steps below.
    git clone https://github.com/ipfs/ipfs-docs.git
    ```
 
-2. Move into the `ipfs-docs` folder and install the NPM dependencies:
+1. Move into the `ipfs-docs` folder:
 
    ```bash
    cd ipfs-docs
+   ```
+   
+1. Install the NPM dependencies:
+
+   ```bash
    npm install
    ```
 
-3. Boot up the application in _dev mode_:
+1. Boot up the application in _dev mode_:
 
    ```bash
    npm start
    ```
 
-4. Open [localhost:8080](http://localhost:8080) in your browser.
-5. Close the local server with `CTRL` + `c`.
-6. To restart the local server, run `npm start` from within the `ipfs-docs` folder.
+1. Open [localhost:8080](http://localhost:8080) in your browser.
+1. Close the local server with `CTRL` + `c`.
+1. To restart the local server, run `npm start` from within the `ipfs-docs` folder.
 
 ### Troubleshooting
 
@@ -123,7 +128,7 @@ Everyone has an opinion when it comes to documentation, and **that's a good thin
 
 ### Pull requests welcome
 
-Feel free to submit pull requests with any changes you'd like to see. If you're simply changing a typo or editing a styling bug, you can add `ciskip` to the title of your pull request to stop Filecorgi from running. Once merged, the website is updated automatically within 5-10 minutes.
+Feel free to submit pull requests with any changes you'd like to see. We will review and approve, or leave change requests, as soon as we are able.
 
 ## Style and configuration guide
 
@@ -139,14 +144,9 @@ When opening a pull request, CI scripts will run against your feature branch to 
 
 The CI/CD production workflow builds on the `main` branch and deploys the documentation site on [fleek](https://fleek.co/). The site reflects the latest commit on `main`.
 
-### Translation
+## Primary maintainers
 
-Please stay tuned on the steps to translate the documentation.
-
-## Core members
-
-- [@johnnymatthews](https://github.com/johnnymatthews): Project leadership, organization, and primary contact
-- [@cwaring](https://github.com/cwaring): Development support
+- [@2color](https://github.com/2color): Developer relations & technical writing(ecosystem)
 
 ## License
 

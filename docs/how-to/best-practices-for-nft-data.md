@@ -10,9 +10,7 @@ IPFS is a great fit for storing and addressing data for NFTs, or non-fungible to
 
 Since an NFT can't be easily changed after it's been created, it's a good idea to think about how the data for your NFTs is stored, addressed, and made persistent over time. That's why we'll be getting into the specifics of [how to prepare your NFT metadata](#metadata), and we'll also look at [the different kinds of links to IPFS content](#types-of-ipfs-links-and-when-to-use-them) and when you should use each one. Finally, we'll see why [making a plan for your data's persistence](#persistence-and-availability) is important for a good user experience. By following these recommendations, you can help ensure a long and healthy future for your NFT data.
 
-This guide is aimed at developers building NFT platforms and other tools, and it's focused on how to format your data and link to it for the best long-term results. If you're looking for details about smart contract interactions and how token minting works, head over to our [guide to minting NFTs with IPFS][docs-mint-nfts], where we go over the whole process from end-to-end using an Ethereum test network.
-
-If you're interested in a deeper dive in the world of NFT best practices and NFT development in general, head over to [NFT School](https://nftschool.dev) for concept guides, tutorials, and how-tos.
+This guide is aimed at developers building NFT platforms and other tools, and it's focused on how to format your data and link to it for the best long-term results. 
 
 ## Types of IPFS links and when to use them
 
@@ -28,7 +26,7 @@ bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi
 
 There are two versions of CIDs used by IPFS. The example above is a version 1 CID (or CIDv1), and it has some advantages over the older "version 0" format, especially when viewing IPFS content on the web using an IPFS gateway. It's best to use version 1 CIDs for addressing NFT data, in the base32 encoding.
 
-To enable CIDv1 when using the IPFS command line, add the `--cid-version=1` flag when running the `ipfs add` command:
+To enable CIDv1 when using the [IPFS command line provided by Kubo](../install/command-line.md), add the `--cid-version=1` flag when running the `ipfs add` command:
 
 ```shell
 ipfs add --cid-version=1 ~/no-time-to-explain.jpeg
@@ -44,7 +42,7 @@ const cid = await ipfs.add({ content }, {
 })
 ```
 
-If you already have a version 0 CID for your content, there's no need to add it to IPFS again just to get the new CID format! You can convert a v0 CID to v1 using [the ipfs command line](address-ipfs-on-web.md#manual-use-cid-ipfs-io-or-the-command-line) or on the web at [cid.ipfs.io](https://cid.ipfs.io). If you're not sure which version you have, it's easy to tell the difference. Version 0 CIDs are always 46 characters long, starting with `Qm`.
+If you already have a version 0 CID for your content, there's no need to add it to IPFS again just to get the new CID format! You can convert a v0 CID to v1 using [the ipfs command line](address-ipfs-on-web.md#manual-use-cid-ipfs-io-or-the-command-line) or on the web at [cid.ipfs.tech](https://cid.ipfs.tech). If you're not sure which version you have, it's easy to tell the difference. Version 0 CIDs are always 46 characters long, starting with `Qm`.
 
 ::: tip
 You can learn more about CIDs in our [guide to Content Addressing][docs-cid], or by following the [interactive tutorials on ProtoSchool][protoschool-cid].
@@ -74,7 +72,7 @@ HTTP gateways provide interoperability for legacy user-agents that cannot resolv
 
 Here's an example: `https://dweb.link/ipfs/bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi`
 
-User agents with built-in support for IPFS (either via the IPFS Companion browser extension, or via native support, such as provided by Brave) will be able to recognize gateway links and resolve the content using native IPFS protocols. Other user-agents will simply follow the link to the gateway, which will load the content over IPFS and serve it using HTTP. You can learn more details about HTTP gateways in our [concept article on IPFS Gateway][docs-gateway].
+User agents with built-in support for IPFS (either via the [IPFS Companion browser extension](../install/ipfs-companion.md), or via native support) will be able to recognize gateway links and resolve the content using native IPFS protocols. Other user-agents will simply follow the link to the gateway, which will load the content over IPFS and serve it using HTTP. You can learn more details about HTTP gateways in our [concept article on IPFS Gateway][docs-gateway].
 
 Gateway links are great for interoperability, but they should not be the primary or canonical link to your data on IPFS. While an IPFS URI will remain accessible as long as anyone on IPFS has the data, a gateway link can fail if the gateway operator goes offline. 
 
@@ -147,8 +145,6 @@ You can also use a service from [Protocol Labs](https://protocol.ai) called [nft
 
 To learn more about persistence and pinning, including how to work with remote pinning services, see our [overview of persistence, permanence, and pinning][docs-persistence].
 
-For an example application that integrates with a remote pinning service for NFT data storage, see our [guide to minting NFTs with IPFS][docs-mint-nfts].
-
 ## Summary
 
 IPFS allows NFTs to represent data of any size and format in a secure, verifiable, and distributed way that can stand the test of time. 
@@ -166,16 +162,14 @@ Here's a quick recap of our recommendations:
 - Data persistence should be part of your platform's design. Running your own IPFS infrastructure or using a remote pinning service will keep your data online and accessible.
 
 
-[docs-cid]: /concepts/content-addressing
-[docs-mint-nfts]: /how-to/mint-nfts-with-ipfs
-[docs-minty-how-ipfs-helps]: /how-to/mint-nfts-with-ipfs/#how-ipfs-helps
-[docs-persistence]: /concepts/persistence/
-[docs-server-infra]: /install/server-infrastructure/
-[docs-gateway]: /concepts/ipfs-gateway/
+[docs-cid]: ../concepts/content-addressing.md
+[docs-persistence]: ../concepts/persistence.md
+[docs-server-infra]: ../install/server-infrastructure.md
+[docs-gateway]: ../concepts/ipfs-gateway.md
 
 [docs-multibase]: https://github.com/multiformats/multibase
 
-[ipfs-cluster]: https://cluster.ipfs.io
+[ipfs-cluster]: https://ipfscluster.io/
 
 [protoschool-cid]: https://proto.school/content-addressing
 [eip-721]: https://eips.ethereum.org/EIPS/eip-721

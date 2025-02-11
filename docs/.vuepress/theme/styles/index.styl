@@ -6,6 +6,7 @@
 @import 'video';
 @import 'alert-panels';
 @import 'ipfs';
+@require '~vuepress-plugin-tabs/dist/themes/default.styl'
 
 // apply scrolling by default excluding firefox due to trigger issues
 html.smooth-scroll {
@@ -74,4 +75,27 @@ code {
 	--border-color: $borderColor;
 	--code-bg-color: $codeBgColor;
 	--highlight-color: $highlightColor;
+}
+
+section.tabs-component-panel::before {
+    content: '';
+    display: block;
+    position: relative;
+    width: 0;
+    height: 10em;
+    margin-top: -10em;
+}
+
+@media (min-width: 1060px) {
+	.nav-links{
+		margin-right: 10%;
+		margin-left: 10%;
+		float: left;
+	}
+}
+
+@media (min-width: 500px) and (max-width: 720px) {
+	.sidebar{
+		width: 40%;
+	}
 }

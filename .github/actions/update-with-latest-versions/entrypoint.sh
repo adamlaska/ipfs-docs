@@ -4,6 +4,8 @@ set -eu
 BRANCH=bump-documentation-to-latest-versions
 LATEST_IPFS_TAG=$INPUT_LATEST_IPFS_TAG
 
+git config --global --add safe.directory "$PWD"
+
 echo "The latest Kubo tag is ${LATEST_IPFS_TAG}"
 
 ROOT=`pwd`
@@ -50,6 +52,11 @@ update_version() {
 
     LATEST_VERSION_TAG=`curl -L -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${INPUT_REPOSITORY}/releases/latest" | jq --raw-output ".tag_name"`
     LATEST_VERSION_NUMBER=${LATEST_VERSION_TAG:1}
+
+    if [ "$LATEST_VERSION_TAG" = "null" ]; then
+        echo "https://api.github.com returned null, please re-run this job, if the problem persists this script needs to be rewritten"
+        exit 1
+    fi
 
     echo "Updating documentation files that rely on ${INPUT_VERSION_IDENTIFIER} to ${LATEST_VERSION_TAG}"
 
