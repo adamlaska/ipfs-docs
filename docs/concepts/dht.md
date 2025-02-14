@@ -1,5 +1,5 @@
 ---
-title: Distributed Hash Tables (DHTs)
+title: Distributed Hash Tables (DHT)
 description: Learn what distributed hash tables (DHTs) are, how they store who has what data, and how they play a part in the overall lifecycle of IPFS.
 ---
 
@@ -17,7 +17,7 @@ These record types hold slightly different semantics, but they are all updated a
 
 ## Kademlia
 
-The Kademlia algorithm has been around for a while, and it's purpose is to build a DHT on top of three system parameters:
+The Kademlia algorithm has been around for a while, and its purpose is to build a DHT on top of three system parameters:
 
 1. An _address space_ as a way that all of the network peers can be uniquely identified. In IPFS, this is all the numbers from `0` to `2^256-1`.
 1. A _metric_ to order the peers in the address space and therefore visualize all the peers along a line ordered from smallest to largest. IPFS takes `SHA256(PeerID)` and interprets it as an integer between `0` and `2^256-1`.
@@ -35,15 +35,15 @@ A major property of Kademlia is that all peers can be arranged from smallest to 
 
 While having peers that cannot talk to each other may sound like an oddity, two prevalent causes of unreachability are network address translators (NATs) and firewalls. Having asymmetrical networks where peers `X`, `Y`, and `Z` can connect to `A`, but `A` cannot connect to them is fairly common. Similarly, it is _extremely_ common that peers `A` and `B`, which are both behind NATs, cannot talk to each other. To deal with this, IPFS nodes ignore other nodes assumed to be unreachable by the general public. Nodes also filter themselves out of the network if they suspect they are not reachable.
 
-To do this, we use [libp2p's AutoNAT](https://github.com/libp2p/go-libp2p-autonat), which acts as a distributed _session traversal utility for NAT_ (STUN) layer, informing peers of their observed addresses and whether or not they appear to be publicly dialable. Only when peers detect that they are publicly dialable do they switch from client mode (where they can query the DHT but not respond to queries) to server mode (where they can both query and respond to queries). Similarly, if a server discovers that it is no longer publicly dialable, it will switch back into client mode.
+To do this, we use [libp2p's AutoNAT](https://github.com/libp2p/go-libp2p/tree/master/p2p/host/autonat), which acts as a distributed _session traversal utility for NAT_ (STUN) layer, informing peers of their observed addresses and whether or not they appear to be publicly dialable. Only when peers detect that they are publicly dialable do they switch from client mode (where they can query the DHT but not respond to queries) to server mode (where they can both query and respond to queries). Similarly, if a server discovers that it is no longer publicly dialable, it will switch back into client mode.
 
 IPFS exposes a _rate-limited_ AutoNAT service on all IPFS nodes that have discovered that they are publicly dialable. These requests are infrequent and do not have a noticeable overhead.
 
 ## Dual DHT
 
-Many IPFS nodes utilize the publicly shared DHT to discover and advertise content. However, some nodes operate in segregated networks such as local networks or isolated VPNs. For these users, having a DHT where all non-publicly dialable nodes are clients is very problematic since none of them are publicly dialable.
+Many IPFS nodes utilize the public [Amino DHT](../concepts/glossary.md#amino) to discover and advertise content. However, some nodes operate in segregated networks such as local networks or isolated VPNs. For these users, having a DHT where all non-publicly dialable nodes are clients is very problematic since none of them are publicly dialable.
 
-A separate DHT is available to nodes that are not part of the public network called _LAN DHT_. This is completely separate from the public _WAN DHT_. These two DHTs are separated by utilizing different DHT protocol names:
+A separate DHT is available to nodes that are not part of the public network called _LAN DHT_. This is completely separate from the public Amino _WAN DHT_. These two DHTs are separated by utilizing different DHT protocol names:
 
 | DHT | Path                  |
 | --- | --------------------- |
@@ -68,7 +68,7 @@ There are three properties of note here: [qualification](#qualification), [bucke
 Qualifying peers that can be added into a routing table fit these two criteria:
 
 1. Ensure the peer is a DHT server that is advertising the DHT protocol ID, `/ipfs/kad/1.0.0` for the WAN DHT, and `/ipfs/lan/kad/1.0.0` for the LAN DHT.
-1. Ensure the peer has IP addresses that match the ranges we expect. For example, members of the public DHT having at least one public range IP address as opposed to only addresses like `192.168.X.Y`
+1. Ensure the peer has IP addresses that match the ranges we expect. For example, members of the Amino DHT having at least one public range IP address as opposed to only addresses like `192.168.X.Y`
 
 ### Peer buckets
 
@@ -82,7 +82,7 @@ To keep the routing tables accurate and up to date, IPFS refreshes the routing t
    1. For each bucket, select a random address in the Kademlia space that could fit in that bucket and do a lookup to find the `K` closest peers to that random address. This will ensure that we will have filled up each bucket with as many peers as will fit.
 1. Also, search for ourselves in the network, just in case the network size and distribution are such that the first 15 buckets do not suffice to learn about the `K` peers closest to us.
 
-Peers can be dropped from the routing table for several reasons, usually because that peer is offline or unreachable. After every refresh, IPFS goes through the routing table and attempt to connect to peers that we have not queried recently. If any peers are not active or online, they are dropped from the routing table. Peers can also be dropped if they have not been useful within the time period during which they are _probabilistically expected_ to have been utilized in a refresh. That value is `Log(1/K) * Log(1 - α/K) * refreshPeriod`, where `α` is the number of peers dialed that can be simultaneously queried. Additionally, IPFS defines _useful_ as responding within 2x when it takes any other peer from our routing table to respond to us. This biases against peers that are slow, overloaded, unreliable, or have bad network connectivity to us.
+Peers can be dropped from the routing table for several reasons, usually because that peer is offline or unreachable. After every refresh, IPFS goes through the routing table and attempt to connect to peers that we have not queried recently. If any peers are not active or online, they are dropped from the routing table. Peers can also be dropped if they have not been useful within the time period during which they are _probabilistically expected_ to have been utilized in a refresh. That value is `Log(1/K) / Log(1 - α/K) * refreshPeriod`, where `α` is the number of peers dialed that can be simultaneously queried. Additionally, IPFS defines _useful_ as responding within 2x when it takes any other peer from our routing table to respond to us. This biases against peers that are slow, overloaded, unreliable, or have bad network connectivity to us.
 
 ## Lookup algorithm
 
@@ -103,7 +103,7 @@ While the lookup algorithm is what allows IPFS to `PUT` and `GET` records into t
 
 For a block with Multihash `H`:
 
-#### Provide `PUT`
+#### Provider `PUT`
 
 1. Do a standard lookup for the `K` closest peers to `SHA256(H)`
 1. Put the provider record at those K closest peers, and also store it ourselves.

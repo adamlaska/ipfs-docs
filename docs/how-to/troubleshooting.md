@@ -1,17 +1,17 @@
 ---
 title: Troubleshooting
-description: "If you're running into problems with IPFS, use this page to debug your issues and find a solution quickly."
+description: "If you're running into problems with Kubo, use this page to debug your issues and find a solution quickly."
 ---
 
 # Troubleshooting
 
-If you're running into problems with IPFS, use this page to debug your issues and find a solution quickly.
+If you're running into problems with Kubo, use this page to debug your issues and find a solution quickly.
 
-## Check that your IPFS daemon is running
+## Check that your Kubo daemon is running
 
 If you're getting unexpected behavior when trying to run common commands such as `ipfs get <cid>` returning `Error: merkledag: not found`, the issue is likely that your daemon isn't running. This can be remedied by running `ipfs daemon`, and using a different terminal to interact with the daemon.
 
-## IPFS is running slowly
+## Kubo is running slowly
 
 Commands like `ipfs ls` are going to the network to try and find data. If for some reason, that data is not _findable_ then Kubo will just keep looking for who has the data forever. Common reasons for data not being _findable_ are that:
 
@@ -27,9 +27,9 @@ You can pass a timeout flag to basically all Kubo commands if you're concerned a
 
 ## File transfers
 
-To start, make sure that IPFS is running on both machines. To verify, run `ipfs id` on each machine and check if the `Addresses` field has anything in it. If it says `null`, then your node is not online, and you will need to run `ipfs daemon`.
+To start, make sure that Kubo is running on both machines. To verify, run `ipfs id` on each machine and check if the `Addresses` field has anything in it. If it says `null`, then your node is not online, and you will need to run `ipfs daemon`.
 
-Now, let's call the node with the file you want to transfer node 'A' and the node you want to get the file to node 'B'. On `node a`, add the file to IPFS using the `ipfs add` command. This will print out the multihash of the content you added. Now, on `node b`, you can fetch the content using `ipfs get <hash>`.
+Now, let's call the node with the file you want to transfer node 'A' and the node you want to get the file to node 'B'. On `node a`, add the file to Kubo using the `ipfs add` command. This will print out the multihash of the content you added. Now, on `node b`, you can fetch the content using `ipfs get <hash>`.
 
 ```shell
 # On A
@@ -42,7 +42,7 @@ ipfs get QmZJ1xT1T9KYkHhgRhbv8D7mYrbemaXwYUkg7CeHdrk1Ye
 > 13 B / 13 B [=====================================================] 100.00% 1s
 ```
 
-If that worked and your node downloaded the file, then congratulations! You just used IPFS to move files across the internet! But, if that `ipfs get` command is hanging, with no output, read onwards.
+If that worked and your node downloaded the file, then congratulations! You just used Kubo to move files across the internet! But, if that `ipfs get` command is hanging, with no output, continue reading.
 
 ### Checking for existing connections
 
@@ -50,24 +50,24 @@ The first thing to do is to double-check that both nodes are, in fact, running a
 
 ```json
 {
-    "ID": "QmTNwsFkLAed15kQEC1ZJWPfoNbBQnMFojfJKQ9sZj1dk8",
-        "PublicKey": "CAASpgIwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDZb6znj3LQZKP1+X81exf+vbnqNCMtHjZ5RKTCm7Fytnfe+AI1fhs9YbZdkgFkM1HLxmIOLQj2bMXPIGxUM+EnewN8tWurx4B3+lR/LWNwNYcCFL+jF2ltc6SE6BC8kMLEZd4zidOLPZ8lIRpd0x3qmsjhGefuRwrKeKlR4tQ3C76ziOms47uLdiVVkl5LyJ5+mn4rXOjNKt/oy2O4m1St7X7/yNt8qQgYsPfe/hCOywxCEIHEkqmil+vn7bu4RpAtsUzCcBDoLUIWuU3i6qfytD05hP8Clo+at+l//ctjMxylf3IQ5qyP+yfvazk+WHcsB0tWueEmiU5P2nfUUIR3AgMBAAE=",
+    "ID": "12D3KooWRaeAw2oromYUN5rAjYQ6KhqvXiWg8KuxeU9YWv7v3Ewa",
+        "PublicKey": "CAASp[...]P2nfUUIR3AgMBAAE=",
         "Addresses": [
-            "/ip4/127.0.0.1/tcp/4001/p2p/QmTNwsFkLAed15kQEC1ZJWPfoNbBQnMFojfJKQ9sZj1dk8",
-        "/ip4/127.0.0.1/udp/4001/quic/p2p/QmTNwsFkLAed15kQEC1ZJWPfoNbBQnMFojfJKQ9sZj1dk8",
-        "/ip4/192.168.2.131/tcp/4001/p2p/QmTNwsFkLAed15kQEC1ZJWPfoNbBQnMFojfJKQ9sZj1dk8",
-        "/ip4/192.168.2.131/udp/4001/quic/p2p/QmTNwsFkLAed15kQEC1ZJWPfoNbBQnMFojfJKQ9sZj1dk8"
+            "/ip4/127.0.0.1/tcp/4001/p2p/12D3KooWRaeAw2oromYUN5rAjYQ6KhqvXiWg8KuxeU9YWv7v3Ewa",
+            "/ip4/127.0.0.1/udp/4001/quic-v1/p2p/12D3KooWRaeAw2oromYUN5rAjYQ6KhqvXiWg8KuxeU9YWv7v3Ewa",
+            "/ip4/192.168.2.131/tcp/4001/p2p/12D3KooWRaeAw2oromYUN5rAjYQ6KhqvXiWg8KuxeU9YWv7v3Ewa",
+            "/ip4/192.168.2.131/udp/4001/quic-v1/p2p/12D3KooWRaeAw2oromYUN5rAjYQ6KhqvXiWg8KuxeU9YWv7v3Ewa"
         ],
-       "AgentVersion": "kubo/0.4.11-dev/",
+       "AgentVersion": "kubo/0.29.0-dev/",
         "ProtocolVersion": "ipfs/0.1.0"
 }
 ```
 
-Next, check to see if the nodes have a connection to each other. You can do this by running `ipfs swarm peers` on one node and checking for the other node's peer ID in the output. If the two nodes _are_ connected, and the `ipfs get` command is still hanging, then something unexpected is going on, and I recommend filing an issue about it. If they are not connected, then let's try and debug why. (Note: you can skip to [Manually connecting `node a` to `node b`](#manually-connecting-node-a-to-b) if you just want things to work. However, going through the debugging process and reporting what happened to the IPFS team on IRC is helpful to us to understand common pitfalls that people run into).
+Next, check to see if the nodes have a connection to each other. You can do this by running `ipfs swarm peers` on one node and checking for the other node's peer ID in the output. If the two nodes _are_ connected, and the `ipfs get` command is still hanging, then something unexpected is going on, and Kubo maintainers recommend filing an issue about it. If they are not connected, then let's try and debug why. (Note: you can skip to [Manually connecting `node a` to `node b`](#manually-connecting-node-a-to-node-b) if you just want things to work. However, going through the debugging process and reporting what happened to the Kubo maintainers is helpful to us to understand common pitfalls that people run into).
 
 ### Checking providers
 
-When requesting content on IPFS, nodes search the DHT for 'provider records' to see who has what content. Let's manually do that on `node b` to make sure that `node b` is able to determine that `node a` has the data. Run `ipfs dht findprovs <hash>`. We expect to see the peer ID of `node a` printed out. If this command returns nothing (or returns IDs that are not `node a`), then no record of A having the data exists on the network. This can happen if the data is added while `node a` does not have a daemon running. If this happens, you can run `ipfs dht provide <hash>` on `node a` to announce to the network that you have that hash. Then if you restart the `ipfs get` command, `node b` should now be able to tell that `node a` has the content it wants. If `node a`'s peer ID showed up in the initial `findprovs` call or manually providing the hash didn't resolve the problem, then it's likely that `node b` is unable to make a connection to `node a`.
+When requesting content with Kubo, nodes search the DHT for 'provider records' to see who has what content. Let's manually do that on `node b` to make sure that `node b` is able to determine that `node a` has the data. Run `ipfs dht findprovs <hash>`. We expect to see the peer ID of `node a` printed out. If this command returns nothing (or returns IDs that are not `node a`), then no record of A having the data exists on the network. This can happen if the data is added while `node a` does not have a daemon running. If this happens, you can run `ipfs dht provide <hash>` on `node a` to announce to the network that you have that hash. Then if you restart the `ipfs get` command, `node b` should now be able to tell that `node a` has the content it wants. If `node a`'s peer ID showed up in the initial `findprovs` call or manually providing the hash didn't resolve the problem, then it's likely that `node b` is unable to make a connection to `node a`.
 
 ### Checking addresses
 
@@ -75,11 +75,11 @@ In the case where `node b` simply cannot form a connection to `node a`, despite 
 
 ```shell
 /ip4/127.0.0.1/tcp/4001
-/ip4/127.0.0.1/udp/4001/quic
+/ip4/127.0.0.1/udp/4001/quic-v1
 /ip4/192.168.2.133/tcp/4001
-/ip4/192.168.2.133/udp/4001/quic
+/ip4/192.168.2.133/udp/4001/quic-v1
 /ip4/88.157.217.196/tcp/63674
-/ip4/88.157.217.196/udp/63674/quic
+/ip4/88.157.217.196/udp/63674/quic-v1
 ```
 
 In this case, we can see a localhost (127.0.0.1) address, a LAN address (the 192.168._._ one), and another address. If this third address matches your external IP, then the network knows a valid external address for your node. At this point, it's safe to assume that your node has a difficult to traverse NAT situation. If this is the case, you can try to enable UPnP or NAT-PMP on the router of `node a` and retry the process. Otherwise, you can try manually connecting `node a` to `node b`.
@@ -101,13 +101,13 @@ If you feel intrepid, you can dump this information and investigate it yourself:
 1. goroutine dump:
 
     ```shell
-    curl localhost:5001/debug/pprof/goroutine\?debug=2 > ipfs.stacks`
+    curl localhost:5001/debug/pprof/goroutine\?debug=2 > ipfs.stacks
     ```
 
 1. 30-second cpu profile:
 
     ```shell
-    curl localhost:5001/debug/pprof/profile > ipfs.cpuprof`
+    curl localhost:5001/debug/pprof/profile > ipfs.cpuprof
     ```
 
 1. heap trace dump:
@@ -125,7 +125,7 @@ If you feel intrepid, you can dump this information and investigate it yourself:
 1. System information:
 
     ```shell
-    ipfs diag sys > ipfs.sysinfo`
+    ipfs diag sys > ipfs.sysinfo
     ```
 
 ### Analyzing the stack dump

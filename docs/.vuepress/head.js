@@ -3,7 +3,6 @@ module.exports = [
     'meta',
     { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
   ],
-  ['link', { rel: 'preconnect', href: 'https://www.google-analytics.com' }],
   [
     'link',
     {
@@ -48,5 +47,10 @@ module.exports = [
       content: '/browserconfig.xml'
     }
   ],
-  ['meta', { name: 'theme-color', content: '#5bbad5' }]
+  ['meta', { name: 'theme-color', content: '#5bbad5' }],
+  ['script', {
+    defer: true,
+    'data-domain': "docs.ipfs.tech", 
+    src: "https://plausible.io/js/plausible.js"
+  }, ``],
 ]

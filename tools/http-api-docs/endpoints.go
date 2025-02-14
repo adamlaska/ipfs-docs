@@ -11,7 +11,7 @@ import (
 	cmds "github.com/ipfs/go-ipfs-cmds"
 	config "github.com/ipfs/kubo"
 	corecmds "github.com/ipfs/kubo/core/commands"
-	peer "github.com/libp2p/go-libp2p-core/peer"
+	peer "github.com/libp2p/go-libp2p/core/peer"
 	multiaddr "github.com/multiformats/go-multiaddr"
 )
 
@@ -98,7 +98,7 @@ func Endpoints(name string, cmd *cmds.Command) (endpoints []*Endpoint) {
 	var arguments []*Argument
 	var options []*Argument
 
-	ignore := cmd.Run == nil || IgnoreEndpoints[name]
+	ignore := cmd.Run == nil || IgnoreEndpoints[name] || cmd.NoRemote
 	if !ignore { // Extract arguments, options...
 		for _, arg := range cmd.Arguments {
 			argType := "string"

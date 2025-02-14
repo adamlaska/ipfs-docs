@@ -5,7 +5,7 @@ description: Learn how to map IPFS content to DNS names using DNSLink.
 
 # DNSLink
 
-DNSLink uses [DNS `TXT` records](https://en.wikipedia.org/wiki/TXT_record) to map a DNS name, like [`ipfs.io`](https://ipfs.io), to an IPFS address. Because you can edit your DNS records, you can use them to always point to the latest version of an object in IPFS. Since DNSLink uses DNS records, you can assign names, paths, and sub-domains that are easy to type, read, and remember.
+DNSLink uses [DNS `TXT` records](https://en.wikipedia.org/wiki/TXT_record) to map a DNS name, such as [`en.wikipedia-on-ipfs.org`](https://en.wikipedia-on-ipfs.org), to either an IPFS address or an [IPNS](../concepts/ipns.md) name. Because you can edit your DNS records, you can use them to always point to the latest version of an object in IPFS. Since DNSLink uses DNS records, you can assign names, paths, and sub-domains that are easy to type, read, and remember.
 
 A DNSLink address looks like an [IPNS](ipns.md) address, but it uses a DNS name in place of a hashed public key:
 
@@ -28,8 +28,8 @@ This not only makes DNSLink lookup more efficient by only returning relevant `TX
 For example, [`docs.ipfs.tech`](https://docs.ipfs.tech) loads because a `TXT` record exists for `_dnslink.docs.ipfs.tech`. If you look up the DNS records for `_dnslink.docs.ipfs.tech`, you'll see the DNSLink entry:
 
 ```shell
-dig +noall +answer TXT \_dnslink.docs.ipfs.tech
-> \_dnslink.docs.ipfs.tech. 30 IN TXT "dnslink=/ipfs/bafybeieenxnjdjm7vbr5zdwemaun4sw4iy7h4imlvvl433q6gzjg6awdpq"
+dig +noall +answer TXT _dnslink.docs.ipfs.tech
+> _dnslink.docs.ipfs.tech. 30 IN TXT "dnslink=/ipfs/bafybeieenxnjdjm7vbr5zdwemaun4sw4iy7h4imlvvl433q6gzjg6awdpq"
 
 ```
 
@@ -64,4 +64,4 @@ Will get you this block:
 
 ## Further Resources
 
-For a complete guide to DNSLink — including tutorials, usage examples, and FAQs — check out [dnslink.io](http://dnslink.io/).
+For a complete guide to DNSLink — including tutorials, usage examples, and FAQs — check out [dnslink.dev](https://dnslink.dev/).
